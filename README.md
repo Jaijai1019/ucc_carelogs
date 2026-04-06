@@ -23,8 +23,8 @@ Make sure you have Node.js installed (compatible with standard Next.js 16 & Reac
 
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/yourusername/my-project.git](https://github.com/yourusername/my-project.git)
-   cd my-project
+   git clone https://github.com/Jaijai1019/ucc_carelogs.git
+   cd ucc_carelogs
 
 2. Install dependencies using
       ```bash
