@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareLogs - Create Account</title>
+  <link rel="stylesheet" href="global.css" />
+  <link rel="stylesheet" href="login_style.css" />
+</head>
+<body>
+  <main class="login">
+    <div class="card">
+
+      <section class="left-panel" aria-label="Application branding">
+        <div class="logo-images">
+          <img class="ucclogo" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/UCC%20Logo-kr2wTR4mmnqUjoqS9xzuqcCRRRaZj4.png" alt="University of Caloocan City Logo" />
+          <img class="csdlogo" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/CSD%20Logo-jaXogTMhplm8CKCwXUlZvYjEFFWnIH.png" alt="CSD Logo" />
+        </div>
+        <div class="system-name">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/System%20Name-M0aDieTy7AQobbdBFuLfKLGgDRDygT.png" alt="CareLogs - School Clinic Management System" />
+        </div>
+      </section>
+
+      <section class="right-panel" aria-label="Create account form">
+        <h1 class="text-wrapper-5">Create Account</h1>
+
+        <div id="registerFormWrap">
+          <div class="msg-error" id="regErrorMsg"></div>
+
+          <div class="name-row">
+            <div class="form-field">
+              <label class="field-label" for="firstName">First Name</label>
+              <input class="field-input" id="firstName" type="text" placeholder="First Name" required />
+            </div>
+            <div class="form-field">
+              <label class="field-label" for="lastName">Last Name</label>
+              <input class="field-input" id="lastName" type="text" placeholder="Last Name" required />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="field-label" for="regEmail">Email / Username</label>
+            <input class="field-input" id="regEmail" type="text" placeholder="example@email.com" required />
+          </div>
+
+          <div class="form-field">
+            <label class="field-label" for="regPassword">Password</label>
+            <input class="field-input" id="regPassword" type="password" placeholder="Create a password" required />
+          </div>
+
+          <div class="form-field">
+            <label class="field-label" for="regPosition">Position</label>
+            <div class="field-select-wrapper">
+              <select class="field-select" id="regPosition" required>
+                <option value="" disabled selected>Please select Position</option>
+                <option value="nurse">Nurse</option>
+                <option value="dentist">Dentist</option>
+                <option value="psychometrician">Psychometrician</option>
+                <option value="staff">Staff</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="btn-submit" id="registerBtn" type="button">Create Account</button>
+
+          <p class="form-footer">
+            Already have an account?
+            <a href="login.html">Login</a>
+          </p>
+        </div>
+
+        <div class="msg-success" id="regSuccessMsg">
+          <p class="success-title">Account Created!</p>
+          <p class="success-sub">Redirecting to login page...</p>
+        </div>
+
+        <div class="care-logo-bottom">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/CareLogo-T6dnwpOU1LdcmRR7p6O9XKb653isPE.png" alt="CareLogs" />
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="db.js"></script>
+  <script src="register_script.js"></script>
+</body>
+</html>
