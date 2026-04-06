@@ -1,9 +1,9 @@
-# ucc_carelogs
+# UCC_carelogs
 
 
 A modern web application built with Next.js and React. This project leverages a robust tech stack designed for high performance, scalable UI development, and robust type safety.
 
-## 🚀 Tech Stack & Features
+##  Tech Stack & Features
 
 * **Framework**: [Next.js](https://nextjs.org/) (v16.2.0)
 * **UI Library**: [React](https://react.dev/) (v19)
@@ -14,7 +14,7 @@ A modern web application built with Next.js and React. This project leverages a 
 * **Forms & Validation**: [React Hook Form](https://react-hook-form.com/) integrated with [Zod](https://zod.dev/)
 * **Data Visualization**: [Recharts](https://recharts.org/)
 
-## 🛠️ Getting Started
+##  Getting Started
 
 ### Prerequisites
 Make sure you have Node.js installed (compatible with standard Next.js 16 & React 19 environments).
