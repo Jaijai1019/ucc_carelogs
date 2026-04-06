@@ -1,7 +1,7 @@
 # UCC_carelogs
 
-
-A modern web application built with Next.js and React. This project leverages a robust tech stack designed for high performance, scalable UI development, and robust type safety.
+> [!UCC_carelogs]
+> A modern web application built with Next.js and React. This project leverages a robust tech stack designed for high performance, scalable UI development, and robust type safety.
 
 ##  Tech Stack & Features
 
@@ -16,7 +16,7 @@ A modern web application built with Next.js and React. This project leverages a 
 
 ##  Getting Started
 
-> [!IMPORTANT]
+> [!NOTE]
 > Make sure you have Node.js installed (compatible with standard Next.js 16 & React 19 environments).
 
 
