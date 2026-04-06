@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareLogs - Dashboard</title>
+  <link rel="stylesheet" href="global.css" />
+  <link rel="stylesheet" href="dashboard_style.css" />
+</head>
+<body>
+  <div class="app-wrapper">
+    <!-- SIDEBAR -->
+    <nav class="sidebar" aria-label="Main navigation">
+      <div class="sidebar-top">
+        <div class="sidebar-logo">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/UCC%20Logo-kr2wTR4mmnqUjoqS9xzuqcCRRRaZj4.png" alt="UCC" />
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/CSD%20Logo-jaXogTMhplm8CKCwXUlZvYjEFFWnIH.png" alt="CSD" />
+        </div>
+        <a href="dashboard.html" class="nav-item active">Home</a>
+        <a href="addstudent.html" class="nav-item">Add Student Log</a>
+        <a href="additems.html" class="nav-item">Add Item</a>
+        <a href="viewitems.html" class="nav-item">View Items</a>
+        <a href="viewlogs.html" class="nav-item">View Logs</a>
+      </div>
+      <div class="sidebar-bottom">
+        <a href="login.html" id="logoutBtn" class="logout-btn">Log out</a>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- TOP BAR -->
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <h1>Welcome, <span id="userNameDisplay">User</span>!</h1>
+        </div>
+        <div class="top-bar-right">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/CareLogo-T6dnwpOU1LdcmRR7p6O9XKb653isPE.png" alt="CareLogs" />
+        </div>
+      </div>
+
+      <!-- BODY -->
+      <div class="page-body">
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-info">
+              <span>Total Patients</span>
+              <strong id="totalPatients">0</strong>
+            </div>
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/patienticon-unqqt69bYk2vOiU2s5BRmalqh9ywcf.png" alt="Patient Icon" />
+          </div>
+          <div class="stat-card">
+            <div class="stat-info">
+              <span>Total Items</span>
+              <strong id="totalItems">0</strong>
+            </div>
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Medicon-0iarHPvwP38nibah89ZUddJHGKn642.png" alt="Medicine Icon" />
+          </div>
+          <div class="stat-card">
+            <div class="stat-info">
+              <span>Logs Today</span>
+              <strong id="logsToday">0</strong>
+            </div>
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Records-aL0b8yiSMYwblSwdgJWu6Lf115iEsp.png" alt="Records Icon" />
+          </div>
+        </div>
+
+        <!-- RECENT RECORDS -->
+        <div class="section-header">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Records-aL0b8yiSMYwblSwdgJWu6Lf115iEsp.png" alt="Records" />
+          <div class="section-header-text">
+            <h2>Recent Records</h2>
+            <small>Latest patient visits in the system</small>
+          </div>
+        </div>
+
+        <div class="table-box">
+          <table class="data-table" aria-label="Recent patient records">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Student ID</th>
+                <th>Course / Year</th>
+                <th>Date</th>
+                <th>Item Given</th>
+                <th>Complaint</th>
+              </tr>
+            </thead>
+            <tbody id="recentRecordsBody">
+              <tr>
+                <td colspan="6" class="empty-state">No records found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="db.js"></script>
+  <script src="dashboard_script.js"></script>
+</body>
+</html>
