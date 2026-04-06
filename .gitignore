@@ -16,3 +16,10 @@ node_modules
 .DS_Store
 .github
 app/
+components.json
+next-env.d.ts
+next.config.mjs
+package-lock.json
+package.json
+postcss.config.mjs
+tsconfig.json
