@@ -11,7 +11,7 @@ next.user-config.*
 .env*.local
 
 # Common ignores
-node_modules
+node_modules/
 .next/
 .DS_Store
 .github
@@ -23,3 +23,5 @@ package-lock.json
 package.json
 postcss.config.mjs
 tsconfig.json
+hooks/
+lib/
