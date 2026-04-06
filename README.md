@@ -16,8 +16,10 @@ A modern web application built with Next.js and React. This project leverages a 
 
 ##  Getting Started
 
-### Prerequisites
-Make sure you have Node.js installed (compatible with standard Next.js 16 & React 19 environments).
+> [!IMPORTANT]
+> Make sure you have Node.js installed (compatible with standard Next.js 16 & React 19 environments).
+
+
 
 ### Installation
 
