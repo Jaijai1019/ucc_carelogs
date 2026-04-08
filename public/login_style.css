@@ -1,6 +1,3 @@
-
-
-/* Background */
 .login {
   background-color: var(--blue-light);
   overflow: hidden;
@@ -66,6 +63,7 @@
   height: auto;
   display: block;
 }
+
 .login .right-panel {
   position: relative;
   width: 58%;
@@ -184,7 +182,6 @@
   background-color: #3a9acc;
 }
 
-
 .form-footer {
   text-align: center;
   margin-top: 16px;
@@ -242,23 +239,12 @@
   margin: 0;
 }
 
-.login .text-wrapper-4 {
-  position: absolute;
-  top: 91px;
-  left: calc(50% - 53px);
-  width: 126px;
-  font-family: "Inter-Bold", Helvetica;
-  font-weight: 700;
-  color: #3a3737;
-  font-size: 41px;
-  margin: 0;
-}
-
 .login .text-wrapper-5 {
   position: absolute;
-  top: 91px;
-  left: calc(48% - 53px);
-  width: 126px;
+  top: 60px; 
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap; 
   font-family: "Inter-Bold", Helvetica;
   font-weight: 700;
   color: #3a3737;
