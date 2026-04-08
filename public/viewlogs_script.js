@@ -1,121 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareLogs - View Logs</title>
+  <link rel="stylesheet" href="global.css" />
+  <link rel="stylesheet" href="dashboard_style.css" />
+</head>
+<body>
+  <div class="app-wrapper">
 
-document.addEventListener('db:ready', function () {
-  const user = DB.getCurrentUser();
-  if (!user) {
-    window.location.href = 'login.html';
-    return;
-  }
+    <nav class="sidebar" aria-label="Main navigation">
+      <div class="sidebar-top">
+        <div class="sidebar-logo">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/UCC%20Logo-kr2wTR4mmnqUjoqS9xzuqcCRRRaZj4.png" alt="UCC" />
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/CSD%20Logo-jaXogTMhplm8CKCwXUlZvYjEFFWnIH.png" alt="CSD" />
+        </div>
+        <a href="dashboard.html" class="nav-item">Home</a>
+        <a href="addstudent.html" class="nav-item">Add Student Log</a>
+        <a href="additems.html" class="nav-item">Add Item</a>
+        <a href="viewitems.html" class="nav-item">View Items</a>
+        <a href="viewlogs.html" class="nav-item active">View Logs</a>
+      </div>
+      <div class="sidebar-bottom">
+        <a href="login.html" id="logoutBtn" class="logout-btn">Log out</a>
+      </div>
+    </nav>
 
-  setupLogout();
-  loadLogs();
+    <main class="main-content">
+      <div class="top-bar">
+        <div class="top-bar-left">
+          <h1>Clinic <span>Logs</span></h1>
+        </div>
+        <div class="top-bar-right">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/CareLogo-T6dnwpOU1LdcmRR7p6O9XKb653isPE.png" alt="CareLogs" />
+        </div>
+      </div>
 
-  document.getElementById('searchLogs').addEventListener('input', loadLogs);
-  document.getElementById('filterDate').addEventListener('change', loadLogs);
+      <div class="page-body">
+        <div class="alert error" id="alertError">An error occurred. Please try again.</div>
 
+        <div class="search-bar-wrap">
+          <input class="search-input" id="searchLogs" type="search" placeholder="Search by name or ID..." />
+          <input class="search-input" id="filterDate" type="date" style="max-width:200px;" title="Filter by date" />
+          <a href="addstudent.html" class="btn-primary" style="padding:12px 24px; font-size:15px; border-radius:30px; text-decoration:none;">+ New Log</a>
+        </div>
 
-  document.getElementById('closeViewModal').addEventListener('click', closeViewModal);
-  document.getElementById('closeViewBtn').addEventListener('click', closeViewModal);
-  document.getElementById('viewModal').addEventListener('click', function (e) {
-    if (e.target === this) closeViewModal();
-  });
-});
+        <div class="table-box">
+          <table class="data-table" aria-label="Clinic patient logs">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Student Name</th>
+                <th>Student ID</th>
+                <th>Course / Year</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Complaint</th>
+                <th>Item Given</th>
+                <th>Qty</th>
+                <th>Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="logsTableBody">
+              <tr>
+                <td colspan="11" class="empty-state">No clinic logs recorded yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
 
-function loadLogs() {
-  const search = document.getElementById('searchLogs').value.trim();
-  const date = document.getElementById('filterDate').value;
-  const logs = DB.getAllLogs(search, date);
-  renderLogsTable(logs);
-}
+  <div class="modal-overlay" id="viewModal" role="dialog" aria-modal="true" aria-labelledby="viewModalTitle">
+    <div class="modal-box" style="width:560px;">
+      <button class="modal-close" id="closeViewModal" aria-label="Close">&times;</button>
+      <h2 class="modal-title" id="viewModalTitle">Log Details</h2>
+      <div id="logDetailContent" style="font-size:15px; color:var(--dark); line-height:1.8;"></div>
+      <div class="modal-footer" style="margin-top:20px;">
+        <button class="btn-cancel" id="closeViewBtn">Close</button>
+      </div>
+    </div>
+  </div>
 
-function renderLogsTable(logs) {
-  const tbody = document.getElementById('logsTableBody');
-
-  if (!logs.length) {
-    tbody.innerHTML = '<tr><td colspan="11" class="empty-state">No clinic logs found.</td></tr>';
-    return;
-  }
-
-  tbody.innerHTML = logs.map((log, index) => `
-    <tr>
-      <td>${index + 1}</td>
-      <td><strong>${escHtml(log.firstName + ' ' + log.lastName)}</strong></td>
-      <td>${escHtml(log.studentID)}</td>
-      <td>${escHtml(log.course)}</td>
-      <td>${escHtml(log.visitDate)}</td>
-      <td>${escHtml(log.visitTime || '—')}</td>
-      <td>${escHtml(log.complaint || '—')}</td>
-      <td>${escHtml(log.itemName || '—')}</td>
-      <td>${log.quantityGiven > 0 ? log.quantityGiven : '—'}</td>
-      <td>${escHtml(log.notes || '—')}</td>
-      <td>
-        <button class="btn-edit" onclick="viewLogDetail(${log.id})">View</button>
-        <button class="btn-danger" onclick="deleteLog(${log.id})">Delete</button>
-      </td>
-    </tr>
-  `).join('');
-}
-
-function viewLogDetail(id) {
-  const log = DB.getLogById(id);
-  if (!log) return;
-
-  const content = document.getElementById('logDetailContent');
-  content.innerHTML = `
-    <table style="width:100%; border-collapse:collapse;">
-      ${detailRow('Student Name', log.firstName + ' ' + log.lastName)}
-      ${detailRow('Student ID', log.studentID)}
-      ${detailRow('Course / Year', log.course)}
-      ${detailRow('Gender', log.gender || '—')}
-      ${detailRow('Visit Date', log.visitDate)}
-      ${detailRow('Visit Time', log.visitTime || '—')}
-      ${detailRow('Complaint', log.complaint || '—')}
-      ${detailRow('Item Given', log.itemName || '—')}
-      ${detailRow('Quantity Given', log.quantityGiven > 0 ? log.quantityGiven : '—')}
-      ${detailRow('Notes / Remarks', log.notes || '—')}
-      ${detailRow('Recorded By', log.recordedBy || '—')}
-    </table>
-  `;
-
-  document.getElementById('viewModal').classList.add('open');
-}
-
-function detailRow(label, value) {
-  return `
-    <tr>
-      <td style="font-weight:700; padding:6px 0; width:160px; color:#757575;">${escHtml(label)}</td>
-      <td style="padding:6px 0; color:#3a3737;">${escHtml(String(value))}</td>
-    </tr>
-  `;
-}
-
-function closeViewModal() {
-  document.getElementById('viewModal').classList.remove('open');
-}
-
-function deleteLog(id) {
-  if (!confirm('Delete this clinic log? This cannot be undone.')) return;
-  DB.deleteLog(id);
-  loadLogs();
-}
-
-function setupLogout() {
-  const logoutBtn = document.getElementById('logoutBtn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      if (confirm('Are you sure you want to log out?')) {
-        DB.logout();
-        window.location.href = 'login.html';
-      }
-    });
-  }
-}
-
-function escHtml(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
+  <script src="db.js"></script>
+  <script src="viewlogs_script.js"></script>
+</body>
+</html>
