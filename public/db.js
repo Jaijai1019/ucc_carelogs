@@ -28,7 +28,7 @@
 
       createTables();
       _ready = true;
-
+      
       _resolvers.forEach(fn => fn());
       _resolvers = [];
 
@@ -93,7 +93,6 @@
     localStorage.setItem(DB_KEY, base64);
   }
 
-
   function ready(fn) {
     if (_ready) {
       fn();
@@ -102,14 +101,10 @@
     }
   }
 
-  //  PUBLIC API
-
   const DB = {
 
-    //AUTHORIZATION
 
     registerUser(firstName, lastName, email, password, position) {
-      // Simple check for duplicate email
       const exists = db.exec(
         `SELECT id FROM users WHERE email = ?`, [email]
       );
@@ -146,8 +141,6 @@
     logout() {
       sessionStorage.removeItem('currentUser');
     },
-
-    //INVENTORY
 
     addItem(item) {
       db.run(
@@ -205,8 +198,6 @@
       return queryToObjects(db.exec(`SELECT id, name, quantity, unit FROM inventory WHERE quantity > 0 ORDER BY name`));
     },
 
-    //CLINIC LOGS
-
     addLog(log) {
       db.run(
         `INSERT INTO clinic_logs
@@ -263,8 +254,6 @@
 
     ready
   };
-
-  //  UTIL: Convert sql.js result to array of plain objects
 
   function queryToObjects(results) {
     if (!results || !results.length) return [];
