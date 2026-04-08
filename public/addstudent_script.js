@@ -1,26 +1,18 @@
-// addstudent_script.js
-
 document.addEventListener('db:ready', function () {
-  // Auth guard
   const user = DB.getCurrentUser();
   if (!user) {
     window.location.href = 'login.html';
     return;
   }
-
-  // Logout
   setupLogout();
 
-  // Populate item select from inventory
   populateItemSelect();
 
-  // Set today's date as default
   const dateField = document.getElementById('visitDate');
   if (dateField) {
     dateField.value = new Date().toISOString().split('T')[0];
   }
 
-  // Set current time as default
   const timeField = document.getElementById('visitTime');
   if (timeField) {
     const now = new Date();
@@ -29,13 +21,12 @@ document.addEventListener('db:ready', function () {
     timeField.value = `${hh}:${mm}`;
   }
 
-  // Save
+
   const saveBtn = document.getElementById('saveLogBtn');
   if (saveBtn) {
     saveBtn.addEventListener('click', saveLog);
   }
 
-  // Clear
   const clearBtn = document.getElementById('clearLogBtn');
   if (clearBtn) {
     clearBtn.addEventListener('click', clearForm);
@@ -105,7 +96,7 @@ function saveLog() {
     recordedBy: user ? `${user.firstName} ${user.lastName}` : ''
   });
 
-  // Decrement inventory
+
   if (itemId && quantityGiven > 0) {
     DB.decrementItemQuantity(parseInt(itemId), quantityGiven);
   }
@@ -113,7 +104,7 @@ function saveLog() {
   alertSuccess.style.display = 'block';
   clearForm();
 
-  // Refresh item select (stock may have changed)
+
   setTimeout(populateItemSelect, 200);
 }
 
