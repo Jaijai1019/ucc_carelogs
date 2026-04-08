@@ -1,29 +1,24 @@
-// dashboard_script.js
-
 document.addEventListener('db:ready', function () {
-  // Auth guard
+
   const user = DB.getCurrentUser();
   if (!user) {
     window.location.href = 'login.html';
     return;
   }
 
-  // Display user name
   const nameEl = document.getElementById('userNameDisplay');
   if (nameEl) {
     nameEl.textContent = user.firstName + ' ' + user.lastName;
     nameEl.style.color = '#58B2E6';
   }
 
-  // Update stats
   document.getElementById('totalPatients').textContent = DB.getTotalPatients();
   document.getElementById('totalItems').textContent = DB.getTotalItems();
   document.getElementById('logsToday').textContent = DB.getLogsToday();
 
-  // Recent records table
+
   renderRecentRecords();
 
-  // Logout
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', function (e) {
