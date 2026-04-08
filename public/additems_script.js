@@ -1,7 +1,5 @@
-// additems_script.js
-
 document.addEventListener('db:ready', function () {
-  // Auth guard
+
   const user = DB.getCurrentUser();
   if (!user) {
     window.location.href = 'login.html';
