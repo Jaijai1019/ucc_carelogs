@@ -1,3 +1,5 @@
+let currentItems = [];
+
 document.addEventListener('db:ready', function () {
   const user = DB.getCurrentUser();
   if (!user) {
@@ -6,94 +8,113 @@ document.addEventListener('db:ready', function () {
   }
 
   setupLogout();
-  loadLogs();
+  loadItems();
 
-  document.getElementById('searchLogs').addEventListener('input', loadLogs);
-  document.getElementById('filterDate').addEventListener('change', loadLogs);
+  document.getElementById('searchItems').addEventListener('input', loadItems);
+  document.getElementById('filterCategory').addEventListener('change', loadItems);
 
-  document.getElementById('closeViewModal').addEventListener('click', closeViewModal);
-  document.getElementById('closeViewBtn').addEventListener('click', closeViewModal);
-  document.getElementById('viewModal').addEventListener('click', function (e) {
-    if (e.target === this) closeViewModal();
+  document.getElementById('closeEditModal').addEventListener('click', closeModal);
+  document.getElementById('cancelEditBtn').addEventListener('click', closeModal);
+  document.getElementById('saveEditBtn').addEventListener('click', saveEdit);
+
+  document.getElementById('editModal').addEventListener('click', function (e) {
+    if (e.target === this) closeModal();
   });
 });
 
-function loadLogs() {
-  const search = document.getElementById('searchLogs').value.trim();
-  const date = document.getElementById('filterDate').value;
-  const logs = DB.getAllLogs(search, date);
-  renderLogsTable(logs);
+function loadItems() {
+  const search = document.getElementById('searchItems').value.trim();
+  const category = document.getElementById('filterCategory').value;
+  currentItems = DB.getAllItems(search, category);
+  renderTable();
 }
 
-function renderLogsTable(logs) {
-  const tbody = document.getElementById('logsTableBody');
+function renderTable() {
+  const tbody = document.getElementById('itemsTableBody');
+  const alertSuccess = document.getElementById('alertSuccess');
+  const alertError = document.getElementById('alertError');
+  alertSuccess.style.display = 'none';
+  alertError.style.display = 'none';
 
-  if (!logs.length) {
-    tbody.innerHTML = '<tr><td colspan="11" class="empty-state">No clinic logs found.</td></tr>';
+  if (!currentItems.length) {
+    tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No items found.</td></tr>';
     return;
   }
 
-  tbody.innerHTML = logs.map((log, index) => `
-    <tr>
-      <td>${index + 1}</td>
-      <td><strong>${escHtml(log.firstName + ' ' + log.lastName)}</strong></td>
-      <td>${escHtml(log.studentID)}</td>
-      <td>${escHtml(log.course)}</td>
-      <td>${escHtml(log.visitDate)}</td>
-      <td>${escHtml(log.visitTime || '—')}</td>
-      <td>${escHtml(log.complaint || '—')}</td>
-      <td>${escHtml(log.itemName || '—')}</td>
-      <td>${log.quantityGiven > 0 ? log.quantityGiven : '—'}</td>
-      <td>${escHtml(log.notes || '—')}</td>
-      <td>
-        <button class="btn-edit" onclick="viewLogDetail(${log.id})">View</button>
-        <button class="btn-danger" onclick="deleteLog(${log.id})">Delete</button>
-      </td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = currentItems.map((item, index) => {
+    const statusBadge = getStatusBadge(item.quantity, item.lowThreshold);
+    const expiry = item.expiryDate || '—';
+    return `
+      <tr>
+        <td>${index + 1}</td>
+        <td><strong>${escHtml(item.name)}</strong></td>
+        <td>${escHtml(item.category)}</td>
+        <td>${item.quantity}</td>
+        <td>${escHtml(item.unit || '—')}</td>
+        <td>${escHtml(expiry)}</td>
+        <td>${statusBadge}</td>
+        <td>
+          <button class="btn-edit" onclick="openEdit(${item.id})">Edit</button>
+          <button class="btn-danger" onclick="deleteItem(${item.id})">Delete</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
-function viewLogDetail(id) {
-  const log = DB.getLogById(id);
-  if (!log) return;
-
-  const content = document.getElementById('logDetailContent');
-  content.innerHTML = `
-    <table style="width:100%; border-collapse:collapse;">
-      ${detailRow('Student Name', log.firstName + ' ' + log.lastName)}
-      ${detailRow('Student ID', log.studentID)}
-      ${detailRow('Course / Year', log.course)}
-      ${detailRow('Gender', log.gender || '—')}
-      ${detailRow('Visit Date', log.visitDate)}
-      ${detailRow('Visit Time', log.visitTime || '—')}
-      ${detailRow('Complaint', log.complaint || '—')}
-      ${detailRow('Item Given', log.itemName || '—')}
-      ${detailRow('Quantity Given', log.quantityGiven > 0 ? log.quantityGiven : '—')}
-      ${detailRow('Notes / Remarks', log.notes || '—')}
-      ${detailRow('Recorded By', log.recordedBy || '—')}
-    </table>
-  `;
-
-  document.getElementById('viewModal').classList.add('open');
+function getStatusBadge(qty, threshold) {
+  const low = threshold || 10;
+  if (qty === 0) return '<span class="badge badge-critical">Out of Stock</span>';
+  if (qty <= low) return '<span class="badge badge-low">Low Stock</span>';
+  return '<span class="badge badge-ok">In Stock</span>';
 }
 
-function detailRow(label, value) {
-  return `
-    <tr>
-      <td style="font-weight:700; padding:6px 0; width:160px; color:#757575;">${escHtml(label)}</td>
-      <td style="padding:6px 0; color:#3a3737;">${escHtml(String(value))}</td>
-    </tr>
-  `;
+function openEdit(id) {
+  const item = DB.getItemById(id);
+  if (!item) return;
+
+  document.getElementById('editItemId').value = item.id;
+  document.getElementById('editItemName').value = item.name;
+  document.getElementById('editItemCategory').value = item.category;
+  document.getElementById('editItemQty').value = item.quantity;
+  document.getElementById('editItemUnit').value = item.unit || '';
+  document.getElementById('editItemExpiry').value = item.expiryDate || '';
+  document.getElementById('editItemThreshold').value = item.lowThreshold || 10;
+
+  document.getElementById('editModal').classList.add('open');
 }
 
-function closeViewModal() {
-  document.getElementById('viewModal').classList.remove('open');
+function closeModal() {
+  document.getElementById('editModal').classList.remove('open');
 }
 
-function deleteLog(id) {
-  if (!confirm('Delete this clinic log? This cannot be undone.')) return;
-  DB.deleteLog(id);
-  loadLogs();
+function saveEdit() {
+  const id = parseInt(document.getElementById('editItemId').value);
+  const name = document.getElementById('editItemName').value.trim();
+  const category = document.getElementById('editItemCategory').value;
+  const quantity = parseInt(document.getElementById('editItemQty').value);
+  const unit = document.getElementById('editItemUnit').value.trim();
+  const expiryDate = document.getElementById('editItemExpiry').value;
+  const lowThreshold = parseInt(document.getElementById('editItemThreshold').value) || 10;
+
+  if (!name || !category || isNaN(quantity)) {
+    alert('Please fill in required fields.');
+    return;
+  }
+
+  DB.updateItem(id, { name, category, quantity, unit, expiryDate, description: '', lowThreshold });
+  closeModal();
+
+  const alertSuccess = document.getElementById('alertSuccess');
+  alertSuccess.textContent = 'Item updated successfully!';
+  alertSuccess.style.display = 'block';
+  loadItems();
+}
+
+function deleteItem(id) {
+  if (!confirm('Are you sure you want to delete this item?')) return;
+  DB.deleteItem(id);
+  loadItems();
 }
 
 function setupLogout() {
