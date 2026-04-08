@@ -14,7 +14,7 @@ body {
   box-sizing: border-box;
 }
 
-/*SIDEBAR*/
+
 .sidebar {
   width: 230px;
   min-width: 230px;
@@ -85,7 +85,6 @@ body {
   background-color: #222020;
 }
 
-/*MAIN CONTENT*/
 .main-content {
   flex: 1;
   background-color: var(--white);
@@ -95,7 +94,6 @@ body {
   overflow: hidden;
 }
 
-/*HEADER BAR */
 .top-bar {
   display: flex;
   align-items: center;
@@ -121,7 +119,6 @@ body {
   object-fit: contain;
 }
 
-/* SCROLLABLE INNER */
 .page-body {
   flex: 1;
   overflow-y: auto;
@@ -136,7 +133,6 @@ body {
   border-radius: 4px;
 }
 
-/* ===== PAGE TITLE ===== */
 .page-title {
   font-size: 24px;
   font-weight: 700;
@@ -144,7 +140,6 @@ body {
   margin-bottom: 24px;
 }
 
-/* STAT CARDS */
 .stats-row {
   display: flex;
   gap: 28px;
@@ -181,7 +176,6 @@ body {
   height: auto;
 }
 
-/* ===== SECTION HEADER ===== */
 .section-header {
   display: flex;
   align-items: center;
@@ -206,7 +200,6 @@ body {
   color: var(--gray-light);
 }
 
-/* ===== TABLE BOX ===== */
 .table-box {
   background-color: var(--bg-card);
   border: 1.5px solid var(--border);
@@ -247,7 +240,6 @@ body {
   background-color: #f0f8ff;
 }
 
-/* ===== FORM PAGE STYLES ===== */
 .form-card {
   background-color: var(--bg-card);
   border: 1.5px solid var(--border);
@@ -379,7 +371,6 @@ body {
 
 .btn-edit:hover { background-color: #3a9acc; }
 
-/* ===== SEARCH BAR ===== */
 .search-bar-wrap {
   display: flex;
   align-items: center;
@@ -403,7 +394,6 @@ body {
 
 .search-input::placeholder { color: var(--gray-light); font-weight: 400; }
 
-/*ALERTS*/
 .alert {
   display: none;
   padding: 12px 20px;
@@ -513,4 +503,29 @@ body {
   padding: 48px 20px;
   color: var(--gray-light);
   font-size: 15px;
+}
+
+.form-card {
+  background-color: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: 26px;
+  padding: 30px 40px;
+  max-width: 1000px;
+  margin: 0 auto;    
+}
+
+.form-row-triple {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.form-row-date-time {
+  display: grid;
+  grid-template-columns: 2fr 1fr; 
+  gap: 20px;
+}
+
+.inner-form-field.full-width {
+  grid-column: span 3;
 }
