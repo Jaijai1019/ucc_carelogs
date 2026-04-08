@@ -31,7 +31,6 @@ document.addEventListener('db:ready', function () {
     }
   });
 
-  // Allow Enter key
   ['email', 'password', 'position'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
