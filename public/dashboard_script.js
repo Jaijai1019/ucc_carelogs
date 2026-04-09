@@ -1,5 +1,4 @@
 document.addEventListener('db:ready', function () {
-
   const user = DB.getCurrentUser();
   if (!user) {
     window.location.href = 'login.html';
@@ -15,7 +14,6 @@ document.addEventListener('db:ready', function () {
   document.getElementById('totalPatients').textContent = DB.getTotalPatients();
   document.getElementById('totalItems').textContent = DB.getTotalItems();
   document.getElementById('logsToday').textContent = DB.getLogsToday();
-
 
   renderRecentRecords();
 
@@ -47,11 +45,18 @@ function renderRecentRecords() {
       <td>${escHtml(log.firstName + ' ' + log.lastName)}</td>
       <td>${escHtml(log.studentID)}</td>
       <td>${escHtml(log.course)}</td>
-      <td>${escHtml(log.visitDate)}</td>
-      <td>${escHtml(log.itemName || '—')}</td>
+      <td>${escHtml(formatToMMDDYYYY(log.visitDate))}</td> <td>${escHtml(log.itemName || '—')}</td>
       <td>${escHtml(log.complaint || '—')}</td>
     </tr>
   `).join('');
+}
+
+function formatToMMDDYYYY(dateStr) {
+  if (!dateStr || dateStr === '—') return '—';
+  const parts = dateStr.split('-'); 
+  if (parts.length !== 3) return dateStr; 
+  const [year, month, day] = parts;
+  return `${month}-${day}-${year}`;
 }
 
 function escHtml(str) {
