@@ -25,6 +25,24 @@ function loadLogs() {
   renderLogsTable(logs);
 }
 
+function formatTo12Hour(timeStr) {
+  if (!timeStr || timeStr === '—') return '—';
+  let [hours, minutes] = timeStr.split(':');
+  hours = parseInt(hours);
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; 
+  return `${hours}:${minutes} ${ampm}`;
+}
+
+function formatToMMDDYYYY(dateStr) {
+  if (!dateStr || dateStr === '—') return '—';
+  const parts = dateStr.split('-'); 
+  if (parts.length !== 3) return dateStr; 
+  const [year, month, day] = parts;
+  return `${month}-${day}-${year}`;
+}
+
 function renderLogsTable(logs) {
   const tbody = document.getElementById('logsTableBody');
 
@@ -39,9 +57,7 @@ function renderLogsTable(logs) {
       <td><strong>${escHtml(log.firstName + ' ' + log.lastName)}</strong></td>
       <td>${escHtml(log.studentID)}</td>
       <td>${escHtml(log.course)}</td>
-      <td>${escHtml(log.visitDate)}</td>
-      <td>${escHtml(log.visitTime || '—')}</td>
-      <td>${escHtml(log.complaint || '—')}</td>
+      <td>${escHtml(formatToMMDDYYYY(log.visitDate))}</td> <td>${escHtml(formatTo12Hour(log.visitTime))}</td> <td>${escHtml(log.complaint || '—')}</td>
       <td>${escHtml(log.itemName || '—')}</td>
       <td>${log.quantityGiven > 0 ? log.quantityGiven : '—'}</td>
       <td>${escHtml(log.notes || '—')}</td>
@@ -64,9 +80,7 @@ function viewLogDetail(id) {
       ${detailRow('Student ID', log.studentID)}
       ${detailRow('Course / Year', log.course)}
       ${detailRow('Gender', log.gender || '—')}
-      ${detailRow('Visit Date', log.visitDate)}
-      ${detailRow('Visit Time', log.visitTime || '—')}
-      ${detailRow('Complaint', log.complaint || '—')}
+      ${detailRow('Visit Date', formatToMMDDYYYY(log.visitDate))} ${detailRow('Visit Time', formatTo12Hour(log.visitTime))} ${detailRow('Complaint', log.complaint || '—')}
       ${detailRow('Item Given', log.itemName || '—')}
       ${detailRow('Quantity Given', log.quantityGiven > 0 ? log.quantityGiven : '—')}
       ${detailRow('Notes / Remarks', log.notes || '—')}
