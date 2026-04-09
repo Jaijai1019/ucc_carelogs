@@ -33,8 +33,9 @@ function renderTable() {
   const tbody = document.getElementById('itemsTableBody');
   const alertSuccess = document.getElementById('alertSuccess');
   const alertError = document.getElementById('alertError');
-  alertSuccess.style.display = 'none';
-  alertError.style.display = 'none';
+  
+  if (alertSuccess) alertSuccess.style.display = 'none';
+  if (alertError) alertError.style.display = 'none';
 
   if (!currentItems.length) {
     tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No items found.</td></tr>';
@@ -43,7 +44,8 @@ function renderTable() {
 
   tbody.innerHTML = currentItems.map((item, index) => {
     const statusBadge = getStatusBadge(item.quantity, item.lowThreshold);
-    const expiry = item.expiryDate || '—';
+    const expiry = formatToMMDDYYYY(item.expiryDate); 
+    
     return `
       <tr>
         <td>${index + 1}</td>
@@ -51,7 +53,7 @@ function renderTable() {
         <td>${escHtml(item.category)}</td>
         <td>${item.quantity}</td>
         <td>${escHtml(item.unit || '—')}</td>
-        <td>${escHtml(expiry)}</td>
+        <td>${escHtml(expiry)}</td> 
         <td>${statusBadge}</td>
         <td>
           <button class="btn-edit" onclick="openEdit(${item.id})">Edit</button>
@@ -62,11 +64,28 @@ function renderTable() {
   }).join('');
 }
 
+function formatToMMDDYYYY(dateStr) {
+  if (!dateStr || dateStr === '—' || dateStr === '') return '—';
+  const parts = dateStr.split('-'); 
+  if (parts.length !== 3) return dateStr; 
+  const [year, month, day] = parts;
+  return `${month}-${day}-${year}`;
+}
+
 function getStatusBadge(qty, threshold) {
   const low = threshold || 10;
   if (qty === 0) return '<span class="badge badge-critical">Out of Stock</span>';
   if (qty <= low) return '<span class="badge badge-low">Low Stock</span>';
   return '<span class="badge badge-ok">In Stock</span>';
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 function openEdit(id) {
@@ -106,8 +125,10 @@ function saveEdit() {
   closeModal();
 
   const alertSuccess = document.getElementById('alertSuccess');
-  alertSuccess.textContent = 'Item updated successfully!';
-  alertSuccess.style.display = 'block';
+  if (alertSuccess) {
+    alertSuccess.textContent = 'Item updated successfully!';
+    alertSuccess.style.display = 'block';
+  }
   loadItems();
 }
 
@@ -128,13 +149,4 @@ function setupLogout() {
       }
     });
   }
-}
-
-function escHtml(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
 }
